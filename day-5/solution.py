@@ -19,7 +19,6 @@ def pop_n(stack_id: int, n: int, flip=True) -> list:
     stack = stacks[stack_id]
     items = stack[-n:][::-1] if flip else stack[-n:]
     del stack[-n:]
-    stacks[stack_id] = stack
     return items
 
 
