@@ -1,8 +1,11 @@
 import logging
+from math import gcd
+
+import numpy as np
 
 logging.basicConfig(level=logging.WARNING)
 
-ROUNDS = 20
+ROUNDS = 10_000
 
 
 class Monkey:
@@ -15,8 +18,9 @@ class Monkey:
         self.false_monkey_id = false_monkey_id
         self.items_inspected = 0
 
-    def update_worry_level(self):
-        return eval(self.operation) // 3
+    def update_worry_level(self, lcm):
+        # return eval(self.operation) // 3 # for part 1
+        return eval(self.operation) % lcm # for part 2
 
     def is_test_action_passed(self):
         return self.old % self.test_val == 0
@@ -61,7 +65,7 @@ def parse_input():
     return monkeys
 
 
-def play(monkeys):
+def play(monkeys, lcm):
     for i, m in enumerate(monkeys):
 
         logging.debug(f'Monkey {i}:')
@@ -69,9 +73,9 @@ def play(monkeys):
         for item in m.items:
             logging.debug(f'\tMonkey inspects an item with a worry level {item}')
             m.old = item
-            m.old = m.update_worry_level()
+            m.old = m.update_worry_level(lcm)
             logging.debug(f'\tCurrent worry level: {m.old}')
-            logging.debug(f'\t{m.old} is divisible by {m.test_val}? {m.old % m.test_val == 0}')
+            logging.debug(f'\t{m.old} is divisible by {m    .test_val}? {m.old % m.test_val == 0}')
             if m.is_test_action_passed():
                 logging.debug(f'\t\tYes, Send to {m.true_monkey_id}')
                 monkeys[m.true_monkey_id].items.append(m.old)
@@ -83,15 +87,29 @@ def play(monkeys):
     return monkeys
 
 
+def get_lcm(monkeys):
+    value = []
+    for m in monkeys:
+        value.extend(m.items)
+
+    lcm = 1
+    for i in value:
+        lcm = lcm * i // gcd(lcm, i)
+    return lcm
+
+
 def main():
     monkeys = parse_input()
+    lcm = get_lcm(monkeys)
+
     for i in range(ROUNDS):
-        if i % 100 == 0:
+        if i % 1000 == 0:
             logging.warning(f'Playing game {i}')
-        monkeys = play(monkeys)
+        monkeys = play(monkeys, lcm)
 
     monkeys = sorted(monkeys, key=lambda x: x.items_inspected, reverse=True)
     t1, t2 = monkeys[:2]
+    print(t1.items_inspected, t2.items_inspected)
     logging.warning(f'Result:  {t1.items_inspected * t2.items_inspected}')
 
 
