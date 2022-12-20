@@ -47,7 +47,7 @@ def compare(left, right):
         return True if len(right) >= 1 else False
 
     if type(left) == type(right) == list:
-        if len(left) == 0 and len(right) == 0:
+        if len(left) == len(right):
             return None
         return len(left) < len(right)
 
