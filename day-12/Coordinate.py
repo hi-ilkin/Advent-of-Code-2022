@@ -7,9 +7,6 @@ class Coordinate:
     col: int
     distance: int = 0
 
-    def get_manhattan_distance(self, coordinate):
-        return abs(self.row - coordinate.row) + abs(self.row - coordinate.row)
-
     def __add__(self, coordinate):
         return Coordinate(self.row + coordinate.row, self.col + coordinate.col)
 
