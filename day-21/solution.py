@@ -31,7 +31,6 @@ def split_by_operation(operation_str):
 
 def find_number(monkeys, key):
     if isinstance(monkeys[key], int):
-        print(f'{key}: {monkeys[key]}')
         return monkeys[key]
     #
     elif key == 'humn':
